@@ -1,0 +1,58 @@
+services:
+  postgres:
+    extends:
+      file: postgres/docker-compose.yml
+      service: postgres
+  postgres-exporter:
+    extends:
+      file: postgres/docker-compose.yml
+      service: postgres-exporter
+  redis:
+    extends:
+      file: redis/docker-compose.yml
+      service: redis
+  redis-exporter:
+    extends:
+      file: redis/docker-compose.yml
+      service: redis-exporter
+  nginx:
+    extends:
+      file: nginx/docker-compose.yml
+      service: nginx
+  nginx-exporter:
+    extends:
+      file: nginx/docker-compose.yml
+      service: nginx-exporter
+  # envoy:
+  #   extends:
+  #     file: envoy/docker-compose.yml
+  #     service: envoy
+  app-1:
+    extends:
+      file: app/docker-compose.yml
+      service: app-1
+    ports:
+      - 8080:8080
+  app-2:
+    extends:
+      file: app/docker-compose.yml
+      service: app-2
+  wrk:
+    extends:
+      file: wrk/docker-compose.yml
+      service: wrk
+    profiles:
+      - manual
+  prometheus:
+    extends:
+      file: prometheus/docker-compose.yml
+      service: prometheus
+  grafana:
+    extends:
+      file: grafana/docker-compose.yml
+      service: grafana
+
+volumes:
+  postgres: {}
+  redis: {}
+  prometheus: {}

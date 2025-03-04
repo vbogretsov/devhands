@@ -1,0 +1,101 @@
+static_resources:
+  listeners:
+  - name: listener_0
+    address:
+      socket_address:
+        address: 0.0.0.0
+        port_value: 80
+    filter_chains:
+    - filters:
+      - name: envoy.filters.network.http_connection_manager
+        typed_config:
+          "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
+          stat_prefix: ingress_http
+          access_log:
+          - name: envoy.access_loggers.stdout
+            typed_config:
+              "@type": type.googleapis.com/envoy.extensions.access_loggers.stream.v3.StdoutAccessLog
+          http_filters:
+          - name: envoy.filters.http.router
+            typed_config:
+              "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
+          route_config:
+            name: local_route
+            request_headers_to_add:
+            - append: true
+              header:
+                key: "X-Real-IP"
+                value: "%DOWNSTREAM_REMOTE_ADDRESS%"
+            - append: true
+              header:
+                key: "X-Forwarded-For"
+                value: "%DOWNSTREAM_REMOTE_ADDRESS%"
+            - append: true
+              header:
+                key: "X-Forwarded-Proto"
+                value: "http"
+            virtual_hosts:
+            - name: backend
+              domains: ["*"]
+              routes:
+              - match:
+                  prefix: "/api"
+                route:
+                  cluster: app_cluster
+                  timeout: 10s
+                  max_grpc_timeout: 10s
+                  retry_policy:
+                    retry_on: "5xx"
+                    num_retries: 3
+              - match:
+                  prefix: "/"
+                route:
+                  cluster: static_cluster
+          common_http_protocol_options:
+            idle_timeout: 15s
+            max_requests_per_connection: 1000
+          http_protocol_options:
+            accept_http_10: true
+          stream_idle_timeout: 10s
+          request_timeout: 10s
+
+  clusters:
+  - name: app_cluster
+    connect_timeout: 0.25s
+    type: STRICT_DNS
+    lb_policy: ROUND_ROBIN
+    load_assignment:
+      cluster_name: app_cluster
+      endpoints:
+      - lb_endpoints:
+        - endpoint:
+            address:
+              socket_address:
+                address: app-1
+                port_value: 8080
+        - endpoint:
+            address:
+              socket_address:
+                address: app-2
+                port_value: 8080
+
+  - name: static_cluster
+    connect_timeout: 0.25s
+    type: STRICT_DNS
+    lb_policy: ROUND_ROBIN
+    load_assignment:
+      cluster_name: static_cluster
+      endpoints:
+      - lb_endpoints:
+        - endpoint:
+            address:
+              socket_address:
+                address: 127.0.0.1
+                port_value: 80
+
+admin:
+  access_log_path: /dev/stdout
+  address:
+    socket_address:
+      address: 0.0.0.0
+      port_value: 9901

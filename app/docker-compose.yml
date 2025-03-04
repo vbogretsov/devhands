@@ -1,0 +1,6 @@
+services:
+  app-1:
+    image: vbogretsov/app:1
+    build: .
+  app-2:
+    image: vbogretsov/app:1

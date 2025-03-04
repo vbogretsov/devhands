@@ -1,0 +1,4 @@
+services:
+  wrk:
+    image: williamyeh/wrk:4.0.2
+    build: .
