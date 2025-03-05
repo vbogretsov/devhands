@@ -23,10 +23,6 @@ services:
     extends:
       file: nginx/docker-compose.yml
       service: nginx-exporter
-  # envoy:
-  #   extends:
-  #     file: envoy/docker-compose.yml
-  #     service: envoy
   app-1:
     extends:
       file: app/docker-compose.yml

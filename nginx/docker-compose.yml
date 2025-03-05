@@ -9,6 +9,4 @@ services:
     # dashboard id: 12708
     image: nginx/nginx-prometheus-exporter:1.4
     command:
-      - '--nginx.scrape-uri=http://nginx:80/stub_status'
-    ports:
-      - 9113:9113
+      - '--nginx.scrape-uri=http://nginx:81/nginx_status'
