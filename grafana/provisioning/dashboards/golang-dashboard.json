@@ -1051,6 +1051,19 @@
         "tagsQuery": "",
         "type": "query",
         "useTags": false
+      },
+      {
+        "name": "instance",
+        "label": "instance",
+        "type": "query",
+        "datasource": "${DS_PROMETHEUS}",
+        "query": "label_values(go_memstats_mspan_inuse_bytes, instance)",
+        "definition": "label_values(go_memstats_mspan_inuse_bytes, instance)",
+        "refresh": 1,
+        "sort": 1,
+        "multi": true,
+        "useTags": false,
+        "includeAll": false
       }
     ]
   },

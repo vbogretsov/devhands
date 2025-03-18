@@ -43,6 +43,10 @@ services:
     extends:
       file: prometheus/docker-compose.yml
       service: prometheus
+  node-exporter:
+    extends:
+      file: prometheus/docker-compose.yml
+      service: node-exporter
   grafana:
     extends:
       file: grafana/docker-compose.yml

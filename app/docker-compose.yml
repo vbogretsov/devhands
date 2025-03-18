@@ -6,3 +6,7 @@ services:
       - 8080:8080
   app-2:
     image: vbogretsov/app:1
+  atlas:
+    image: arigaio/atlas
+    volumes:
+      - ./db:/db

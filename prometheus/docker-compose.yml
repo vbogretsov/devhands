@@ -5,3 +5,17 @@ services:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
+  node-exporter:
+    image: prom/node-exporter
+    pid: host
+    uts: host
+    cgroup: host
+    userns_mode: host
+    ipc: host
+    restart: on-failure
+    ports:
+      - 9100:9100
+    command:
+      - '--path.rootfs=/host'
+    volumes:
+      - /:/host:ro

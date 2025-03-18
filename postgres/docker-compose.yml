@@ -1,6 +1,7 @@
 services:
   postgres:
     image: postgres:17-alpine
+    # image: postgis/postgis:17-3.5-alpine
     command: >
       postgres
       -c log_destination=stderr
@@ -12,6 +13,8 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DATABASE: ${POSTGRES_DB}
+    ports:
+      - 40000:5432
     volumes:
       - postgres:/var/lib/postgresql/data
     logging:
