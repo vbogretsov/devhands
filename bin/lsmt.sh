@@ -1,0 +1,57 @@
+#!/bin/bash
+
+# Function to display usage
+usage() {
+    echo "Usage: $0 -t <thread_range> -c <connection_range> -R <request_rate_range> -d <duration> -L <url>"
+    echo "Example: $0 -t 1-4 -c 10-100 -R 1000-5000 -d 120s -L http://localhost/"
+    exit 1
+}
+
+# Check if no arguments are provided
+if [ $# -eq 0 ]; then
+    usage
+fi
+
+# Parse command-line arguments
+while getopts ":t:c:R:d:L:" opt; do
+    case $opt in
+        t) THREAD_RANGE="$OPTARG" ;;
+        c) CONNECTION_RANGE="$OPTARG" ;;
+        R) REQUEST_RATE_RANGE="$OPTARG" ;;
+        d) DURATION="$OPTARG" ;;
+        L) URL="$OPTARG" ;;
+        *) usage ;;
+    esac
+done
+
+# Validate required arguments
+if [ -z "$THREAD_RANGE" ] || [ -z "$CONNECTION_RANGE" ] || [ -z "$REQUEST_RATE_RANGE" ] || [ -z "$DURATION" ] || [ -z "$URL" ]; then
+    echo "Error: Missing required arguments."
+    usage
+fi
+
+# Function to generate a range of numbers
+generate_range() {
+    local range=$1
+    local start end
+    IFS='-' read -r start end <<< "$range"
+    seq $start $end
+}
+
+# Generate ranges for threads, connections, and request rates
+THREADS=($(generate_range "$THREAD_RANGE"))
+CONNECTIONS=($(generate_range "$CONNECTION_RANGE"))
+REQUEST_RATES=($(generate_range "$REQUEST_RATE_RANGE"))
+
+# Iterate through all combinations of parameters
+for t in "${THREADS[@]}"; do
+    for c in "${CONNECTIONS[@]}"; do
+        for R in "${REQUEST_RATES[@]}"; do
+            echo "Running wrk with -t$t -c$c -R$R -d$DURATION -L$URL"
+            /local/wrk -t$t -c$c -d$DURATION -R$R -L "$URL"
+            echo "---------------------------------------------"
+        done
+    done
+done
+
+echo "All tests completed."
