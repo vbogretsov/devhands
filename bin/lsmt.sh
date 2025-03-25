@@ -4,7 +4,7 @@
 usage() {
     echo "Usage: $0 -t <thread_range> -c <connection_range> -R <request_rate_range> -d <duration> -L <url>"
     echo "  Ranges should be in the format: start-end-step"
-    echo "Example: $0 -t 1-4-1 -c 10-100-10 -R 1000-5000-1000 -d 120s -L http://localhost/"
+    echo "Example: $0 -t 1-4-1 -c 10-100-10 -R 1000-5000-1000 -d 120s -L -p root http://localhost/"
     exit 1
 }
 
@@ -21,12 +21,13 @@ while getopts ":t:c:R:d:L:" opt; do
         R) REQUEST_RATE_RANGE="$OPTARG" ;;
         d) DURATION="$OPTARG" ;;
         L) URL="$OPTARG" ;;
+        p) PREFIX="$OPTARG" ;;
         *) usage ;;
     esac
 done
 
 # Validate required arguments
-if [ -z "$THREAD_RANGE" ] || [ -z "$CONNECTION_RANGE" ] || [ -z "$REQUEST_RATE_RANGE" ] || [ -z "$DURATION" ] || [ -z "$URL" ]; then
+if [ -z "$THREAD_RANGE" ] || [ -z "$CONNECTION_RANGE" ] || [ -z "$REQUEST_RATE_RANGE" ] || [ -z "$DURATION" ] || [ -z "$URL" ] || [ -z "$PREFIX" ]; then
     echo "Error: Missing required arguments."
     usage
 fi
@@ -49,7 +50,7 @@ for t in "${THREADS[@]}"; do
     for c in "${CONNECTIONS[@]}"; do
         for R in "${REQUEST_RATES[@]}"; do
             echo "Running wrk with -t$t -c$c -R$R -d$DURATION -L$URL"
-            /local/wrk -t"$t" -c"$c" -d"$DURATION" -R"$R" -L "$URL" > ./log/root-t${t}-c${c}-R${R}.log
+            /local/wrk -t"$t" -c"$c" -d"$DURATION" -R"$R" -L "$URL" > ./log/${PREFIX}-t${t}-c${c}-R${R}.log
             sleep 20
             echo "---------------------------------------------"
         done
