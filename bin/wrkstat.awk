@@ -14,10 +14,10 @@ BEGIN {
 }
 
 /99\.000%/ {
-    latency_value = $2;
-    latency_unit = $3;
+    split($2, arr, /[a-z]/);
+    latency_value = arr[1];
+    latency_unit = substr($2, length(arr[1]) + 1, 1);
 
-    printf "latency_unit=%s\n", latency_unit;
     latency_p99 = (latency_unit == "s") ? latency_value * 1000 : latency_value;
 }
 
