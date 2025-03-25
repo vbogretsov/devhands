@@ -2,7 +2,6 @@ package main
 
 import (
 	"log/slog"
-	"net/http"
 	"os"
 
 	"github.com/labstack/echo/v4"
@@ -11,6 +10,8 @@ import (
 	slogecho "github.com/samber/slog-echo"
 	"github.com/valyala/fasthttp"
 	"github.com/valyala/fasthttp/fasthttpadaptor"
+
+	"app/pkg/handlers"
 )
 
 func main() {
@@ -24,11 +25,10 @@ func main() {
 	e.Use(middleware.Recover())
 	e.Use(Metrics())
 
-	e.GET("/api", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World!")
-	})
+	e.GET("/api/hello", handlers.Hello)
+	e.GET("/api/wait/:ms", handlers.WaitCPU)
 
-	e.GET("/metrics", echo.WrapHandler(promhttp.Handler()))
+	e.GET("/api/metrics", echo.WrapHandler(promhttp.Handler()))
 
 	fs := &fasthttp.Server{
 		Handler: fasthttpadaptor.NewFastHTTPHandler(e),
