@@ -4,7 +4,7 @@
 usage() {
     echo "Usage: $0 -t <thread_range> -c <connection_range> -R <request_rate_range> -d <duration> -L <url>"
     echo "  Ranges should be in the format: start-end-step"
-    echo "Example: $0 -t 1-4-1 -c 10-100-10 -R 1000-5000-1000 -d 120s -p root -L http://localhost/"
+    echo "Example: $0 -t 1-4-1 -c 10-100-10 -R 1000-5000-1000 -d 120s -p root  -L http://localhost/"
     exit 1
 }
 
@@ -14,7 +14,7 @@ if [ $# -eq 0 ]; then
 fi
 
 # Parse command-line arguments
-while getopts ":t:c:R:d:L:" opt; do
+while getopts ":t:c:R:d:L:p:" opt; do
     case $opt in
         t) THREAD_RANGE="$OPTARG" ;;
         c) CONNECTION_RANGE="$OPTARG" ;;
