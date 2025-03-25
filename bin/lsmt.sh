@@ -27,8 +27,28 @@ while getopts ":t:c:R:d:L:" opt; do
 done
 
 # Validate required arguments
-if [ -z "$THREAD_RANGE" ] || [ -z "$CONNECTION_RANGE" ] || [ -z "$REQUEST_RATE_RANGE" ] || [ -z "$DURATION" ] || [ -z "$URL" ] || [ -z "$PREFIX" ]; then
-    echo "Error: Missing required arguments."
+if [ -z "$THREAD_RANGE" ]; then
+    echo "Error: missing required argument -t"
+    usage
+fi
+
+if [ -z "$CONNECTION_RANGE" ]; then
+    echo "Error: missing required argument -c"
+    usage
+fi
+
+if [ -z "$REQUEST_RATE_RANGE" ]; then
+    echo "Error: missing required argument -R"
+    usage
+fi
+
+if [ -z "$DURATION" ]; then
+    echo "Error: missing required argument -d"
+    usage
+fi
+
+if [ -z "$PREFIX" ]; then
+    echo "Error: missing required argument -p"
     usage
 fi
 
