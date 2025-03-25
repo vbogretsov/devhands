@@ -9,6 +9,13 @@ BEGIN {
     latency_p99 = 0;
 }
 
+FNR == 1 {
+    if (FILENAME ~ /-R[0-9]+\./) {
+        split(FILENAME, parts, /-R|\./);
+        requests = parts[2];
+    }
+}
+
 /Requests\/sec:/ {
     rps = $2;
 }
@@ -22,5 +29,5 @@ BEGIN {
 }
 
 END {
-    printf "{name: \"%s\", rps: %s, l: %.2f}\n", test_name, rps, latency_p99;
+    printf "{Test: \"%s\", R: %s, rps: %s, l: %.2f}\n", test_name, requests, rps, latency_p99;
 }
