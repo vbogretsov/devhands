@@ -23,9 +23,15 @@ FNR == 1 {
 /99\.000%/ {
     split($2, arr, /[a-z]/);
     latency_value = arr[1];
-    latency_unit = substr($2, length(arr[1]) + 1, 1);
+    latency_unit = substr($2, length(arr[1]) + 1, 2);
 
-    latency_p99 = (latency_unit == "s") ? latency_value * 1000 : latency_value;
+    if (latency_unit == "s") {
+        latency_p99 = latency_value * 1000;
+    } else if (latency_unit == "m") {
+        latency_p99 = latency_value * 1000 * 60;
+    } else {
+        latency_p99 = latency_value;
+    }
 }
 
 END {
