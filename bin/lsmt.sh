@@ -70,8 +70,8 @@ for t in "${THREADS[@]}"; do
     for c in "${CONNECTIONS[@]}"; do
         for R in "${REQUEST_RATES[@]}"; do
             echo "Running wrk with -t$t -c$c -R$R -d$DURATION -L$URL"
-            /local/wrk -t"$t" -c"$c" -d"$DURATION" -R"$R" -L "$URL" > ./log/${PREFIX}-t${t}-c${c}-R${R}.log
-            sleep 20
+            docker compose run --rm wrkx -t"$t" -c"$c" -d"$DURATION" -R"$R" -L "$URL" > ./log/${PREFIX}-t${t}-c${c}-R${R}.log
+            sleep 10
             echo "---------------------------------------------"
         done
     done

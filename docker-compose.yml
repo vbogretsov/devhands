@@ -33,12 +33,6 @@ services:
     extends:
       file: app/docker-compose.yml
       service: app-2
-  wrk:
-    extends:
-      file: wrk/docker-compose.yml
-      service: wrk
-    profiles:
-      - manual
   prometheus:
     extends:
       file: prometheus/docker-compose.yml
@@ -51,6 +45,14 @@ services:
     extends:
       file: grafana/docker-compose.yml
       service: grafana
+  wrk:
+    build: wrk
+    profiles:
+      - manual
+  wrkx:
+    build: wrkx
+    profiles:
+      - manual
 
 volumes:
   postgres: {}
