@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6"></script>
+<html><body>
+<!--style>
+body { display: flex; flex-wrap: wrap; justify-content: space-evenly; }
+div { flex-basis: 45%; margin-top: 20px; }
+</style-->
+<div id="myplot"></div>
+<div id="bar"></div>
+<script type=module>
+
+var mydata = [
+
+
+{Test: "nginx-t4-c100", R: 5000, rps: 4910.71, l: 2.45},
+{Test: "nginx-t4-c100", R: 5000, rps: 4990.68, l: 7.07},
+{Test: "nginx-t4-c100", R: 10000, rps: 9821.65, l: 2.47},
+{Test: "nginx-t4-c100", R: 10000, rps: 9900.58, l: 2.44},
+{Test: "nginx-t4-c100", R: 15000, rps: 14731.43, l: 23.14},
+{Test: "nginx-t4-c100", R: 15000, rps: 14968.16, l: 3.63},
+{Test: "nginx-t4-c100", R: 20000, rps: 19262.94, l: 651.26},
+{Test: "nginx-t4-c100", R: 20000, rps: 19958.84, l: 15.03},
+{Test: "nginx-t4-c100", R: 25000, rps: 24348.36, l: 19.89},
+{Test: "nginx-t4-c100", R: 25000, rps: 24946.31, l: 5.74},
+{Test: "nginx-t4-c100", R: 30000, rps: 29462.60, l: 12.19},
+{Test: "nginx-t4-c100", R: 30000, rps: 29936.62, l: 11.45},
+{Test: "nginx-t4-c100", R: 35000, rps: 34652.49, l: 179.33},
+{Test: "nginx-t4-c100", R: 35000, rps: 34923.53, l: 451.58},
+{Test: "nginx-t4-c100", R: 40000, rps: 39599.66, l: 9.12},
+{Test: "nginx-t4-c100", R: 40000, rps: 39914.89, l: 7.68},
+{Test: "nginx-t4-c100", R: 45000, rps: 44552.59, l: 8.88},
+{Test: "nginx-t4-c100", R: 45000, rps: 44902.45, l: 10.53},
+{Test: "nginx-t4-c100", R: 50000, rps: 49499.67, l: 414.46},
+{Test: "nginx-t4-c100", R: 50000, rps: 49500.67, l: 36.29},
+{Test: "nginx-t4-c100", R: 55000, rps: 53962.98, l: 29.82},
+{Test: "nginx-t4-c100", R: 55000, rps: 54452.86, l: 10.37},
+{Test: "nginx-t4-c100", R: 60000, rps: 58897.78, l: 25.65},
+{Test: "nginx-t4-c100", R: 60000, rps: 59405.14, l: 14.02},
+{Test: "nginx-t4-c100", R: 65000, rps: 64238.88, l: 1200.00},
+{Test: "nginx-t4-c100", R: 65000, rps: 64860.99, l: 525.82},
+{Test: "nginx-t4-c100", R: 70000, rps: 69301.61, l: 11.94},
+{Test: "nginx-t4-c100", R: 70000, rps: 69842.57, l: 223.49},
+{Test: "nginx-t4-c100", R: 75000, rps: 73643.40, l: 48.10},
+{Test: "nginx-t4-c100", R: 75000, rps: 74252.03, l: 60.32},
+{Test: "nginx-t4-c100", R: 80000, rps: 78560.10, l: 731.65},
+{Test: "nginx-t4-c100", R: 80000, rps: 79702.84, l: 166.14},
+{Test: "nginx-t4-c100", R: 85000, rps: 84148.53, l: 41.60},
+{Test: "nginx-t4-c100", R: 85000, rps: 84807.79, l: 724.48},
+{Test: "nginx-t4-c100", R: 90000, rps: 89088.88, l: 196.86},
+{Test: "nginx-t4-c100", R: 90000, rps: 89104.17, l: 41.18},
+{Test: "nginx-t4-c100", R: 95000, rps: 93869.61, l: 1390.00},
+{Test: "nginx-t4-c100", R: 95000, rps: 94804.36, l: 558.59},
+{Test: "nginx-t4-c100", R: 100000, rps: 94879.29, l: 2770.00},
+{Test: "nginx-t4-c100", R: 100000, rps: 98775.30, l: 652.29},
+{Test: "nginx-t4-c100", R: 105000, rps: 103793.67, l: 1150.00},
+{Test: "nginx-t4-c100", R: 105000, rps: 103892.81, l: 593.92},
+{Test: "nginx-t4-c100", R: 110000, rps: 106593.85, l: 1590.00},
+{Test: "nginx-t4-c100", R: 110000, rps: 109361.40, l: 1120.00},
+{Test: "nginx-t4-c100", R: 115000, rps: 110697.83, l: 2530.00},
+{Test: "nginx-t4-c100", R: 115000, rps: 113735.93, l: 931.84},
+{Test: "nginx-t4-c100", R: 120000, rps: 117037.33, l: 1180.00},
+{Test: "nginx-t4-c100", R: 120000, rps: 118343.36, l: 2200.00},
+{Test: "nginx-t4-c100", R: 125000, rps: 112680.91, l: 4380.00},
+{Test: "nginx-t4-c100", R: 125000, rps: 121164.43, l: 2490.00},
+{Test: "nginx-t4-c100", R: 130000, rps: 121262.42, l: 3260.00},
+{Test: "nginx-t4-c100", R: 130000, rps: 122240.26, l: 3120.00},
+{Test: "nginx-t4-c100", R: 135000, rps: 126899.59, l: 4130.00},
+{Test: "nginx-t4-c100", R: 135000, rps: 128624.90, l: 3930.00},
+{Test: "nginx-t4-c100", R: 140000, rps: 117995.68, l: 7100.00},
+{Test: "nginx-t4-c100", R: 140000, rps: 118033.17, l: 6760.00},
+{Test: "nginx-t4-c100", R: 145000, rps: 121549.97, l: 8550.00},
+{Test: "nginx-t4-c100", R: 145000, rps: 122152.93, l: 6200.00},
+{Test: "nginx-t4-c100", R: 150000, rps: 115802.99, l: 7370.00},
+{Test: "nginx-t4-c100", R: 150000, rps: 128300.95, l: 6100.00},
+
+
+];
+
+
+
+const plot = Plot.plot({
+  marginTop:    30, marginRight:  30, marginBottom: 40, marginLeft:   50,
+
+  color: {legend: true, domain: ["nginx-t4-c100"], range: ["orange", "darkblue", "darkgreen"]},
+  grid: true,
+  x: {label: "RPS (x1000)"},
+  y: {label: "Latency(ms)"},
+  inset: 10,
+
+  marks: [
+    Plot.ruleY([0]),
+    Plot.lineY(mydata, {x: "rps", y: "l", stroke: "Test"}),
+    Plot.dot(mydata, {x: "rps", y: "l", r: 2, fill: "#000", stroke: "Test"}),
+  ]
+})
+
+const div = document.querySelector("#myplot");
+div.append(plot);
+
+</script></body></body></html>
