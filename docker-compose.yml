@@ -27,22 +27,16 @@ services:
     extends:
       file: nginx/docker-compose.yml
       service: nginx-exporter
-  app-1:
+  dlv-app-1:
     extends:
-      file: app/docker-compose.yml
-      service: app-1
-    security_opt:
-      - seccomp=unconfined
-      - apparmor=unconfined
+      file: apps/delivery/docker-compose.yml
+      service: dlv-app-1
     ports:
       - 8080:8080
-  app-2:
+  dlv-app-2:
     extends:
-      file: app/docker-compose.yml
-      service: app-2
-    security_opt:
-      - seccomp=unconfined
-      - apparmor=unconfined
+      file: apps/delivery/docker-compose.yml
+      service: dlv-app-2
   prometheus:
     extends:
       file: prometheus/docker-compose.yml
@@ -57,16 +51,10 @@ services:
       service: grafana
   wrk:
     build: wrk
-    security_opt:
-      - seccomp=unconfined
-      - apparmor=unconfined
     profiles:
       - manual
   wrkx:
     build: wrkx
-    security_opt:
-      - seccomp=unconfined
-      - apparmor=unconfined
     profiles:
       - manual
 
@@ -74,7 +62,6 @@ volumes:
   postgres: {}
   redis: {}
   prometheus: {}
-
 
 networks:
   macvlan:

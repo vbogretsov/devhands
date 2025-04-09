@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 	"os"
 
 	"github.com/labstack/echo/v4"
@@ -15,6 +16,9 @@ func main() {
 	e.Use(middleware.Recover())
 
 	e.GET("/wait/:ms", WaitCPU)
+	e.GET("/healthz", func(c echo.Context) error {
+		return c.String(http.StatusOK, "ok")
+	})
 
 	f := &fasthttp.Server{
 		Handler: fasthttpadaptor.NewFastHTTPHandler(e),
