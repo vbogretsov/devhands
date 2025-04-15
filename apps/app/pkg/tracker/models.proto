@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package tracker;
+
+option go_package = "pkg/tracker";
+
+message Location {
+  float lat = 1;
+  float lng = 2;
+}
