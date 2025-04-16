@@ -10,9 +10,9 @@ BEGIN {
 }
 
 FNR == 1 {
-    if (FILENAME ~ /-[0-9]+\./) {
-        split(FILENAME, parts, /-R|\./);
-        requests = parts[1];
+    if (FILENAME ~ /-[0-9]+\.log/) {
+        n = split(FILENAME, parts, "-");
+        requests = parts[n];
     }
 }
 
