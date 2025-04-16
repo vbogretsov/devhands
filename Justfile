@@ -8,11 +8,10 @@ export PGPASSWORD := `echo $POSTGRES_PASSWORD`
 psql *FLAGS:
     @docker compose exec -e PGUSER=$PGUSER -e PGPASSWORD=$PGPASSWORD postgres psql {{FLAGS}}
 
-[working-directory: 'apps/delivery']
-dlv-dbdiff:
+[working-directory: 'apps/app']
+app-dbdiff:
     @atlas migrate diff --env main --var dbname=delivery
 
-[working-directory: 'apps/delivery']
-dlv-dbmigrate:
+[working-directory: 'apps/app']
+app-dbmigrate:
     @atlas migrate apply --env main --var dbname=delivery
-

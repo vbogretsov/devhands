@@ -23,12 +23,13 @@ func NewStorage(pool *pgxpool.Pool) Storage {
 func (s *Storage) CreateSpot(ctx context.Context, spot Spot) (Spot, error) {
 	query := `
 	INSERT INTO sm_spot (
-		id, created_at, updated_at, name, description,
+		created_at, updated_at, name, description,
 		country, state, city, lat, lng, raiting
 	) VALUES (
 		$1, $2, $3, $4, $5,
-		$6, $7, $8, $9, $10, $11
+		$6, $7, $8, $9, $10
 	)
+	RETURNING id
 	`
 
 	spot.CreatedAt = time.Now()
@@ -40,10 +41,10 @@ func (s *Storage) CreateSpot(ctx context.Context, spot Spot) (Spot, error) {
 	}
 	defer con.Release()
 
-	_, err = con.Exec(
+	var id int
+	err = con.QueryRow(
 		ctx,
 		query,
-		spot.ID,
 		spot.CreatedAt,
 		spot.UpdatedAt,
 		spot.Name,
@@ -54,8 +55,12 @@ func (s *Storage) CreateSpot(ctx context.Context, spot Spot) (Spot, error) {
 		spot.Lat,
 		spot.Lng,
 		spot.Raiting,
-	)
+	).Scan(&id)
+	if err != nil {
+		return spot, fmt.Errorf("failed to create spot: %w", err)
+	}
 
+	spot.ID = id
 	return spot, nil
 }
 

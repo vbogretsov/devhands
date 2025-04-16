@@ -1,8 +1,0 @@
-services:
-  dlv-app-1:
-    image: vbogretsov/app:1
-    build: .
-    ports:
-      - 8080:8080
-  dlv-app-2:
-    image: vbogretsov/app:1

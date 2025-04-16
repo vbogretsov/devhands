@@ -27,16 +27,12 @@ services:
     extends:
       file: nginx/docker-compose.yml
       service: nginx-exporter
-  dlv-app-1:
+  app-1:
     extends:
-      file: apps/delivery/docker-compose.yml
-      service: dlv-app-1
+      file: apps/app/docker-compose.yml
+      service: app-1
     ports:
-      - 8080:8080
-  dlv-app-2:
-    extends:
-      file: apps/delivery/docker-compose.yml
-      service: dlv-app-2
+      - 8080:8000
   prometheus:
     extends:
       file: prometheus/docker-compose.yml
@@ -53,10 +49,17 @@ services:
     build: wrk
     profiles:
       - manual
+    volumes:
+      - ./wrk/src:/src
+      - ./wrk/data:/data
   wrkx:
     build: wrkx
+    platform: linux/amd64
     profiles:
       - manual
+    volumes:
+      - ./wrk/src:/src
+      - ./wrk/data:/data
 
 volumes:
   postgres: {}

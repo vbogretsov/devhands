@@ -11,11 +11,13 @@ import (
 	"github.com/urfave/cli/v3"
 	"github.com/valyala/fasthttp"
 	"github.com/valyala/fasthttp/fasthttpadaptor"
+	"github.com/karagenc/fj4echo"
 )
 
 func run(ctx context.Context, _ *cli.Command) error {
 	l := setupLog(cfg.Logging)
 	e := echo.New()
+	e.JSONSerializer = fj4echo.New()
 	e.Validator = NewValidator()
 
 	pool, err := pgxpool.NewWithConfig(context.Background(), cfg.Database.GetConfig())

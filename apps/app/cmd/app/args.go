@@ -7,8 +7,8 @@ import (
 )
 
 var args = cli.Command{
-	Name:  "delivery",
-	Usage: "delivery service",
+	Name:      "delivery",
+	Usage:     "delivery service",
 	UsageText: "starts delivery service",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
@@ -68,13 +68,34 @@ var args = cli.Command{
 			Value:       20,
 			Sources:     cli.EnvVars("DB_POOL_SIZE"),
 		},
-		/* &cli.StringFlag{
-			Name:        "cache-url",
-			Destination: &cfg.Cache.URL,
+		&cli.StringFlag{
+			Name:        "redis-address",
+			Destination: &cfg.Redis.Address,
 			Required:    true,
-			Usage:       "cache URL",
-			Sources:     cli.EnvVars("CACHE_URL"),
-		}, */
+			Usage:       "redis address",
+			Sources:     cli.EnvVars("REDIS_ADDRESS"),
+		},
+		&cli.StringFlag{
+			Name:        "redis-password",
+			Destination: &cfg.Redis.Password,
+			Value:       "",
+			Usage:       "redis password",
+			Sources:     cli.EnvVars("REDIS_PASSWORD"),
+		},
+		&cli.IntFlag{
+			Name:        "redis-database",
+			Destination: &cfg.Redis.Database,
+			Value:       0,
+			Usage:       "redis database",
+			Sources:     cli.EnvVars("REDIS_DATABASE"),
+		},
+		&cli.IntFlag{
+			Name:        "redis-pool-sizr",
+			Destination: &cfg.Redis.PoolSize,
+			Value:       1000,
+			Usage:       "redis pool size",
+			Sources:     cli.EnvVars("REDIS_POOL_SIZE"),
+		},
 		&cli.StringFlag{
 			Name:        "log-level",
 			Destination: &cfg.Logging.Level,
@@ -91,7 +112,7 @@ var args = cli.Command{
 		&cli.StringFlag{
 			Name:        "jwt-key",
 			Destination: &cfg.JWTKey,
-			Value:       "",  // NOTE: We allow empty because this is purely test app.
+			Value:       "", // NOTE: We allow empty because this is purely test app.
 			Usage:       "jwt signing key",
 			Sources:     cli.EnvVars("JWT_KEY"),
 		},

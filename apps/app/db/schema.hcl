@@ -3,7 +3,7 @@ schema "public" {}
 table "sm_spot" {
   schema = schema.public
   column "id" {
-    type = integer
+    type = serial
     null = false
   }
   column "created_at" {
@@ -50,7 +50,7 @@ table "sm_spot" {
   }
 }
 
-table "sm_item" {
+/* table "sm_item" {
   schema = schema.public
   column "id" {
     type = integer
@@ -146,4 +146,4 @@ table "sm_order_item" {
     on_delete   = CASCADE
     on_update   = NO_ACTION
   }
-}
+} */

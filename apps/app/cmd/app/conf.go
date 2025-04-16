@@ -16,6 +16,13 @@ type Database struct {
 	PoolSize int64
 }
 
+type Redis struct {
+	Address  string
+	Password string
+	Database int64
+	PoolSize int64
+}
+
 func (d Database) URL() string {
 	return fmt.Sprintf(
 		"postgres://%s:%s@%s:%d/%s",
@@ -54,6 +61,7 @@ type Listen struct {
 type Conf struct {
 	Cache    Cache
 	Database Database
+	Redis    Redis
 	Logging  Logging
 	Listen   Listen
 	JWTKey   string
