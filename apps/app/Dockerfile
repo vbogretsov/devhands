@@ -1,7 +1,7 @@
 FROM golang:1.24-alpine AS build
 WORKDIR /src
 COPY go.mod .
-# COPY go.sum .
+COPY go.sum .
 RUN go mod download
 COPY . .
 RUN CGO_ENABLED=0 GOOS=linux go build -o app -ldflags="-s -w" ./cmd/app
