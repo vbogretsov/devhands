@@ -10,9 +10,9 @@ BEGIN {
 }
 
 FNR == 1 {
-    if (FILENAME ~ /-R[0-9]+\./) {
+    if (FILENAME ~ /-[0-9]+\./) {
         split(FILENAME, parts, /-R|\./);
-        requests = parts[2];
+        requests = parts[1];
     }
 }
 
