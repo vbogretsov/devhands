@@ -13,6 +13,7 @@ FNR == 1 {
     if (FILENAME ~ /-[0-9]+\./) {
         n = split(FILENAME, parts, "-");
         requests = parts[n];
+        sub(/\.log$/, "", requests)
     }
 }
 
