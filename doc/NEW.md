@@ -19,3 +19,4 @@
 - когда подходим к 60-70% CPU система перегружена и latency гафики могут сильно поплыть из-за того что сами измерения непраильне
 - Redis Hash-Slots
 - Postgres SPQR
+- Good resharding - no resharding

@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log/slog"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -41,7 +40,6 @@ func (d Database) GetConfig() *pgxpool.Config {
 	}
 	config.MinConns = 1
 	config.MaxConns = int32(d.PoolSize)
-	slog.Info("pool size", "size", config.MaxConns)
 	return config
 }
 

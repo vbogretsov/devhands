@@ -90,7 +90,7 @@ var args = cli.Command{
 			Sources:     cli.EnvVars("REDIS_DATABASE"),
 		},
 		&cli.IntFlag{
-			Name:        "redis-pool-sizr",
+			Name:        "redis-pool-size",
 			Destination: &cfg.Redis.PoolSize,
 			Value:       1000,
 			Usage:       "redis pool size",

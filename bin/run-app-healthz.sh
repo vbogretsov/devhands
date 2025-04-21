@@ -1,15 +1,16 @@
-DURATION=10s
-THREADS=4
-CONNECTIONS=100
-REQUEST_RATES=
+DURATION=20s
+THREADS=8
+CONNECTIONS=200
+REQUEST_RATES=`seq 140000 2500 150000`
 COOLDOWN=5
-ITERS=`seq 1 1 4`
 
-for i in ${ITERS[@]}; do
-docker compose run --rm wrk \
+for i in ${REQUEST_RATES[@]}; do
+docker compose run --rm wrkx \
     -c ${CONNECTIONS} \
     -t ${THREADS} \
     -d ${DURATION} \
+    -R ${i} \
+    -L \
     http://app-1:8000/healthz
 sleep ${COOLDOWN}
 done
